@@ -1,0 +1,192 @@
+openapi: 3.0.3
+info:
+  title: Banking Microservices API
+  version: 1.0.0
+  description: API documentation for the Spring Boot Microservices Banking Application.
+servers:
+  - url: http://localhost:8080
+    description: API Gateway
+
+paths:
+  /api/users/register:
+    post:
+      summary: Register a new user
+      tags: [User Service]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User registered
+
+  /api/users:
+    get:
+      summary: Get all users
+      tags: [User Service]
+      responses:
+        '200':
+          description: List of users
+
+  /api/users/{id}:
+    get:
+      summary: Get user by ID
+      tags: [User Service]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details
+
+  /accounts:
+    post:
+      summary: Create a new account
+      tags: [Account Service]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '201':
+          description: Account created
+
+  /accounts/{accountNumber}:
+    get:
+      summary: Get account by number
+      tags: [Account Service]
+      parameters:
+        - name: accountNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account details
+
+  /transactions:
+    post:
+      summary: Create a transaction
+      tags: [Transaction Service]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Transaction recorded
+
+  /transactions/{referenceId}:
+    get:
+      summary: Get transaction by reference ID
+      tags: [Transaction Service]
+      parameters:
+        - name: referenceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transaction details
+
+  /fund-transfers:
+    post:
+      summary: Transfer funds between accounts
+      tags: [Fund Transfer Service]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FundTransfer'
+      responses:
+        '200':
+          description: Transfer successful
+
+  /fund-transfers/{referenceId}:
+    get:
+      summary: Get transfer by reference ID
+      tags: [Fund Transfer Service]
+      parameters:
+        - name: referenceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transfer details
+
+  /sequence:
+    post:
+      summary: Generate unique sequence number
+      tags: [Sequence Generator Service]
+      responses:
+        '200':
+          description: Unique sequence generated
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        emailId:
+          type: string
+        contactNumber:
+          type: string
+        password:
+          type: string
+
+    Account:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        accountType:
+          type: string
+        userId:
+          type: integer
+        balance:
+          type: number
+          format: double
+        accountStatus:
+          type: string
+
+    Transaction:
+      type: object
+      properties:
+        accountId:
+          type: string
+        transactionType:
+          type: string
+        amount:
+          type: number
+          format: double
+        description:
+          type: string
+
+    FundTransfer:
+      type: object
+      properties:
+        fromAccount:
+          type: string
+        toAccount:
+          type: string
+        amount:
+          type: number
+          format: double
